@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class BLEScannerService extends Service {
 
     public static final String TAG = "BACKGROUND_DEBUG_FLAG";
-    private Context context;
+    private Context context; //This is the application context
     private ClabkiScanner scanner;
     private DetectionManager detectionManager;
     private final IBinder binder = new LocalBinder();

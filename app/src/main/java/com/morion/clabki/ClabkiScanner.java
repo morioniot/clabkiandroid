@@ -48,7 +48,7 @@ public class ClabkiScanner {
 
     private void setScanSettings() {
         ScanSettings.Builder settingsBuilder = new ScanSettings.Builder();
-        settingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
+        settingsBuilder.setScanMode(ScanSettings.SCAN_MODE_BALANCED);
         settings = settingsBuilder.build();
     }
 
