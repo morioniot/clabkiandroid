@@ -47,15 +47,17 @@ public class DetectionManager {
         if(detectedBeacons.add(beacon)) {
 
             //Send notification
-            String macAddress = beacon.getMacAddress();
+            //String macAddress = beacon.getMacAddress();
+            int major = beacon.getMajor();
+            int minor = beacon.getMinor();
             NotificationFactory notificationFactory = new NotificationFactory();
             Notification detectedBeaconNotification =
-                    notificationFactory.buildBeaconDetectedNotification(context, macAddress);
+                    notificationFactory.buildBeaconDetectedNotification(context, major, minor);
             NotificationManager notificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(beacon.hashCode(), detectedBeaconNotification);
 
-            final int major = beacon.getMajor();
+            /*final int major = beacon.getMajor();
             final int minor = beacon.getMinor();
             String isLostURL = assembleIsLostURL(major, minor);
             JsonObjectRequest isLostRequest = new JsonObjectRequest(Request.Method.GET, isLostURL, null,
@@ -134,7 +136,7 @@ public class DetectionManager {
                 }
             });
 
-            netSingleton.addToRequestQueue(isLostRequest);
+            netSingleton.addToRequestQueue(isLostRequest);*/
         }
     }
 

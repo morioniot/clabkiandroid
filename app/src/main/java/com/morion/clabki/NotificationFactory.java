@@ -47,6 +47,38 @@ public class NotificationFactory {
         return notificationBuilder.build();
     }
 
+    public Notification buildBeaconDetectedNotification(Context context, int major, int minor) {
+
+        //Creating the notification and setting its content
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(context);
+        notificationBuilder.setSmallIcon(R.drawable.dog_notification);
+        notificationBuilder.setContentTitle("Lost doggy close");
+        notificationBuilder.setContentText("Major: " + major + "- Minor: " + minor);
+
+        //Setting sound, lights and vibration of notification
+        Uri notificationSound =
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        notificationBuilder.setSound(notificationSound);
+        notificationBuilder.setLights(Color.BLUE, 2500, 500);
+        notificationBuilder.setVibrate(new long[] {100, 500, 100, 100, 100, 100, 100, 100});
+
+        //Creating the pending intent for the main notification action
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Setting the notification action
+        notificationBuilder.setAutoCancel(true);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        //Returning the notification object after building
+        return notificationBuilder.build();
+    }
+
     public Notification buildTurnOnBluetoothNotification(Context context) {
 
         //Creating the notification and setting its content
