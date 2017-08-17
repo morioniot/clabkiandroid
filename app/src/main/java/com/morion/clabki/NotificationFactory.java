@@ -54,7 +54,7 @@ public class NotificationFactory {
                 new NotificationCompat.Builder(context);
         notificationBuilder.setSmallIcon(R.drawable.dog_notification);
         notificationBuilder.setContentTitle("Lost doggy close");
-        notificationBuilder.setContentText("Major: " + major + "- Minor: " + minor);
+        notificationBuilder.setContentText("Major: " + major + " - Minor: " + minor);
 
         //Setting sound, lights and vibration of notification
         Uri notificationSound =

@@ -92,6 +92,8 @@ public class ClabkiScanner {
         public void onScanResult(int callbackType, ScanResult result) {
 
             byte[] advertisedPackage = result.getScanRecord().getBytes();
+            HexUtil hexTool = new HexUtil();
+            Log.i(TAG, hexTool.byteArrayToHexStr(advertisedPackage));
             int protocol = Beacon.figureOutProtocol( advertisedPackage );
             if(protocol == Beacon.CLABKI_PROTOCOL) {
                 try {

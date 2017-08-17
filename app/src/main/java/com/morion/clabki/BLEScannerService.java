@@ -33,7 +33,8 @@ public class BLEScannerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        scanner.scan(true);
+        if(!scanner.isScanning())
+            scanner.scan(true);
         return Service.START_STICKY;
     }
 
