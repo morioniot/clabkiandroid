@@ -2,4 +2,6 @@
     <string name="app_name">Clabki</string>
     <string name="scan_button_enabled">Stop scan</string>
     <string name="scan_button_disabled">Start scan</string>
+    <string name="facebook_app_id">207271499718170</string>
+    <string name="fb_login_protocol_scheme">fb207271499718170</string>
 </resources>
