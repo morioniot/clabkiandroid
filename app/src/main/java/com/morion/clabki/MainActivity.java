@@ -155,4 +155,10 @@ public class MainActivity extends AppCompatActivity
     public void handleStopScanButton(View view) {
         stopScannerService();
     }
+
+    //Sends to the login Activity
+    public void redirectToLogin(View view) {
+        Intent loginIntent = new Intent(this, FacebookLoginActivity.class);
+        startActivity(loginIntent);
+    }
 }
