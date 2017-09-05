@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "510229576388",
+    "firebase_url": "https://clabki-7c7c9.firebaseio.com",
+    "project_id": "clabki-7c7c9",
+    "storage_bucket": "clabki-7c7c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510229576388:android:ef6cb9d8e2373ee4",
+        "android_client_info": {
+          "package_name": "com.morion.clabki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510229576388-hu7c6ons1v9l07s514o1b12fsv7hddhk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.morion.clabki",
+            "certificate_hash": "8b020948963c6c1c3a887845dee5cbaaca1c0545"
+          }
+        },
+        {
+          "client_id": "510229576388-g13re2v8lpqqctfnv5lvcppsb9a1dkt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0QCCdM-eILtepVtFLgF9BF8QNrcqrIDQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510229576388-g13re2v8lpqqctfnv5lvcppsb9a1dkt3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
