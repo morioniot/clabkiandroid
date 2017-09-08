@@ -3,6 +3,7 @@
     <string name="login_redirect_button">Go to Login</string>
     <string name="scan_button_enabled">Stop scan</string>
     <string name="scan_button_disabled">Start scan</string>
+    <string name="register_login_button">CONTINUAR CON FACEBOOK</string>
     <string name="facebook_app_id">207271499718170</string>
     <string name="fb_login_protocol_scheme">fb207271499718170</string>
 </resources>

@@ -3,71 +3,83 @@ package com.morion.clabki;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class FacebookLoginActivity extends AppCompatActivity {
 
     private TextView loginInfo;
-    private LoginButton loginButton;
+    private Button loginButton;
     private CallbackManager callbackManager;
+    private LoginManager loginManager = LoginManager.getInstance();
+    private ProfileTracker profileTracker;
+
+    private final String TAG = "FACEBOOK_LOGIN_DEBUG";
+
+    //****************************************************************************************
+    //******************************* Activity Life Methods **********************************
+    //****************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_login);
-        callbackManager = CallbackManager.Factory.create();
         initializeControls();
+        callbackManager = CallbackManager.Factory.create();
+        setControlsAccordingToLoginState();
+    }
 
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+    //****************************************************************************************
+    //******************************* Other Methods ******************************************
+    //****************************************************************************************
+
+    //Checks if user is login in Facebook
+    private boolean isUserLogin() {
+        return !(AccessToken.getCurrentAccessToken() == null);
+    }
+
+
+    private void setProfileTracker() {
+
+        profileTracker = new ProfileTracker() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                AccessToken accessToken = loginResult.getAccessToken();
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                setControlsAccordingToLoginState();
+                stopTracking();
+                final AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                //Request to obtain data from user
                 GraphRequest facebookRequest = GraphRequest.newMeRequest(
                         accessToken,
                         new GraphRequest.GraphJSONObjectCallback() {
+
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                
-                                String id, name, email, gender, birthday;
-                                id = name = email = gender = birthday = "no disponible";
-                                
+
                                 try {
-                                    if(object.has("id"))
-                                        id = object.getString("id");
-                                    if(object.has("name"))
-                                        name = object.getString("name");
-                                    if(object.has("email"))
-                                        email = object.getString("email");
-                                    if(object.has("gender"))
-                                        gender = object.getString("gender");
-                                    if(object.has("birthday"))
-                                        birthday = object.getString("birthday");
+                                    Log.i(TAG, "Facebook id: " + object.toString(4));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                catch (JSONException exception) {
-                                    exception.printStackTrace();
-                                }
-                                
-                                
-                                loginInfo.setText("Bienvenido, " + name + "\n"
-                                + "ID: " + id + " '\n"
-                                + "Email: " + email + " 'n"
-                                + "Género: " + gender + "\n"
-                                + "Cumpleaños: " + birthday);
+
+                                Log.i(TAG, "Facebook token: " + accessToken.getToken());
+                                Log.i(TAG, "Firebase token: " + FirebaseInstanceId.getInstance().getToken());
                             }
                         }
                 );
@@ -76,24 +88,53 @@ public class FacebookLoginActivity extends AppCompatActivity {
                 facebookRequest.setParameters(parameters);
                 facebookRequest.executeAsync();
             }
-
-            @Override
-            public void onCancel() {
-                loginInfo.setText("Login cancelled");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                loginInfo.setText("Login Error: " + error.getMessage());
-            }
-        });
+        };
     }
 
+
+    //****************************************************************************************
+    //*************************Methods related with UI controls*******************************
+    //****************************************************************************************
+
+    //Get instances for the different UI controls
     private void initializeControls() {
         loginInfo = (TextView) findViewById(R.id.login_info);
-        loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton = (Button) findViewById(R.id.login_button);
     }
+
+    //Sets the UI elements depending on login state
+    private void setControlsAccordingToLoginState() {
+        //Checks if user is logged to display appropriate button text and welcome message
+        if(isUserLogin()) {
+            Profile profile = Profile.getCurrentProfile();
+            loginInfo.setText("Bienvenido, " + profile.getFirstName());
+            loginButton.setText("SALIR");
+        }
+        else {
+            loginInfo.setText("");
+            loginButton.setText("CONTINUAR CON FACEBOOK");
+        }
+    }
+
+    //Handles the login button
+    public void handleLoginButton(View view) {
+
+        if(isUserLogin()) {
+            loginManager.logOut();
+            setControlsAccordingToLoginState();
+        }
+        else {
+            setProfileTracker();
+            profileTracker.startTracking();
+            loginManager.logInWithReadPermissions(this, Arrays.asList("public_profile","email"));
+        }
+
+    }
+
+
+    //****************************************************************************************
+    //*************************Callbacks used in this activity********************************
+    //****************************************************************************************
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
